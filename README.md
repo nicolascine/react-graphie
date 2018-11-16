@@ -1,4 +1,4 @@
-# react-graphie
+# (WIP) react-graphie
 
 > React graphs with D3
 
@@ -13,15 +13,13 @@ npm install --save react-graphie
 ## Usage
 
 ```tsx
-import * as React from 'react'
+import * as React from "react";
 
-import MyComponent from 'react-graphie'
+import Graph from "react-graphie";
 
 class Example extends React.Component {
-  render () {
-    return (
-      <MyComponent />
-    )
+  render() {
+    return <Graph />;
   }
 }
 ```
