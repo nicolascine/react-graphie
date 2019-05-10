@@ -2,7 +2,7 @@
   "name": "react-graphie",
   "version": "1.0.0",
   "description": "React graphs with D3",
-  "author": "nicolascine",
+  "author": "Nicolás Silva",
   "license": "MIT",
   "repository": "nicolascine/react-graphie",
   "main": "dist/index.js",
