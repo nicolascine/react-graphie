@@ -1,7 +1,3 @@
-/**
- * @class Graph
- */
-
 import * as React from "react";
 import { scaleOrdinal } from "d3-scale";
 import {
@@ -14,7 +10,7 @@ import { schemeCategory10 } from "d3-scale-chromatic";
 import { select, event } from "d3-selection";
 import { drag } from "d3-drag";
 
-export type Props = { data: any };
+export type Props = { data: any; options: object };
 
 interface linkObject {
   id: string;
@@ -50,11 +46,18 @@ interface dragedPosition {
 }
 
 let _wrapper: SVGSVGElement;
-const _innerWidth: number = 600;
 
 export default class Graph extends React.Component<Props> {
+  state = {
+    options: {
+      width: 500,
+      height: 500
+    }
+  };
+
   componentDidMount() {
     this.drawNetwork(this.props.data);
+    this.setState({ options: this.props.options });
   }
 
   drawNetwork(dataSet: any) {
@@ -62,6 +65,10 @@ export default class Graph extends React.Component<Props> {
     const color = scaleOrdinal(schemeCategory10);
     const links = dataSet.links.map((d: nodeFillObject) => Object.create(d));
     const nodes = dataSet.nodes.map((d: nodeFillObject) => Object.create(d));
+
+    //state
+    const width = this.state.options.width;
+    const height = this.state.options.height;
 
     const simulation: any = forceSimulation()
       .force(
@@ -71,7 +78,7 @@ export default class Graph extends React.Component<Props> {
         })
       )
       .force("charge", forceManyBody())
-      .force("center", forceCenter(_innerWidth / 2, 600 / 2));
+      .force("center", forceCenter(width / 2, height / 2));
 
     const link = select(svg)
       .append("g")
@@ -84,7 +91,7 @@ export default class Graph extends React.Component<Props> {
         return Math.sqrt(d.value);
       });
 
-    let node = select(svg)
+    const node = select(svg)
       .append("g")
       .attr("class", "nodes")
       .selectAll("circle")
@@ -92,7 +99,7 @@ export default class Graph extends React.Component<Props> {
       .enter()
       .append("circle")
       .attr("r", function(d: nodeObject) {
-        return d.group === 1 ? 6 : 5;
+        return d.group === 1 ? 9 : 6;
       })
       .attr("fill", function(d: nodeFillObject) {
         return color(d.group);
@@ -136,12 +143,13 @@ export default class Graph extends React.Component<Props> {
   }
 
   render() {
+    const { options } = this.state;
     return (
       <svg
-        className="Network-canvas"
+        key="react-graphie"
         ref={(svgWrapper: SVGSVGElement) => (_wrapper = svgWrapper)}
-        width={_innerWidth}
-        height={600}
+        width={options.width}
+        height={options.height}
       />
     );
   }

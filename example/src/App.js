@@ -1,24 +1,42 @@
-import React, { Component, Fragment } from "react";
-
+import React, { Component } from "react";
 import Graph from "react-graphie";
 
+const data = {
+  nodes: [
+    { id: "Myriel", group: 1 },
+    { id: "Napoleon", group: 2 },
+    { id: "Mlle.Baptistine", group: 3 },
+    { id: "Mme.Magloire", group: 4 }
+  ],
+  links: [
+    { source: "Napoleon", target: "Myriel" },
+    { source: "Mlle.Baptistine", target: "Mlle.Baptistine" },
+    { source: "Mme.Magloire", target: "Mlle.Baptistine" },
+    { source: "Mme.Magloire", target: "Mlle.Baptistine" }
+  ]
+};
+
 export default class App extends Component {
-  state = {
-    data: null
-  };
-  componentDidMount() {
-    fetch(
-      "https://gist.githubusercontent.com/mbostock/4062045/raw/5916d145c8c048a6e3086915a6be464467391c62/miserables.json"
-    )
-      .then(function(response) {
-        return response.json();
-      })
-      .then(data => {
-        this.setState({ data });
-      });
-  }
   render() {
-    const { data } = this.state;
-    return <Fragment>{data && <Graph data={data} />}</Fragment>;
+    const options = {
+      width: 500,
+      height: 500
+    };
+
+    return (
+      <div
+        style={{
+          border: "1px solid gray",
+          width: "500px",
+          height: "500px",
+          display: "block",
+          marginRight: "auto",
+          marginLeft: "auto",
+          marginTop: "150px"
+        }}
+      >
+        <Graph data={data} options={options} />
+      </div>
+    );
   }
 }
