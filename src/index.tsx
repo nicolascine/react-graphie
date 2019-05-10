@@ -1,5 +1,5 @@
 /**
- * @class ExampleComponent
+ * @class Graph
  */
 
 import * as React from "react";
@@ -13,7 +13,6 @@ import {
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { select, event } from "d3-selection";
 import { drag } from "d3-drag";
-//import { transition } from "d3-transition";
 
 export type Props = { data: any };
 
@@ -50,18 +49,21 @@ interface dragedPosition {
   fy: number | null;
 }
 
-let _wrapper: any = Object;
-const _innerWidth: number = 500;
+let _wrapper: SVGSVGElement;
+const _innerWidth: number = 600;
 
-export default class ExampleComponent extends React.Component<Props> {
+export default class Graph extends React.Component<Props> {
   componentDidMount() {
     this.drawNetwork(this.props.data);
   }
+
   drawNetwork(dataSet: any) {
     const svg = _wrapper;
     const color = scaleOrdinal(schemeCategory10);
+    const links = dataSet.links.map((d: nodeFillObject) => Object.create(d));
+    const nodes = dataSet.nodes.map((d: nodeFillObject) => Object.create(d));
 
-    const simulation = forceSimulation()
+    const simulation: any = forceSimulation()
       .force(
         "link",
         forceLink().id(function(d: linkObject) {
@@ -69,13 +71,13 @@ export default class ExampleComponent extends React.Component<Props> {
         })
       )
       .force("charge", forceManyBody())
-      .force("center", forceCenter(_innerWidth / 2, 520 / 2));
+      .force("center", forceCenter(_innerWidth / 2, 600 / 2));
 
     const link = select(svg)
       .append("g")
       .attr("class", "links")
       .selectAll("line")
-      .data(dataSet.links)
+      .data(links)
       .enter()
       .append("line")
       .attr("stroke-width", function(d: linkStroke) {
@@ -86,7 +88,7 @@ export default class ExampleComponent extends React.Component<Props> {
       .append("g")
       .attr("class", "nodes")
       .selectAll("circle")
-      .data(dataSet.nodes)
+      .data(nodes)
       .enter()
       .append("circle")
       .attr("r", function(d: nodeObject) {
@@ -102,32 +104,18 @@ export default class ExampleComponent extends React.Component<Props> {
           .on("end", dragended)
       );
 
-    simulation.nodes(dataSet.nodes).on("tick", ticked);
-    //simulation.force<d3Force.ForceLink>("link").links(dataSet.links);
-
-    function ticked() {
+    simulation.nodes(nodes).on("tick", () => {
       link
-        .attr("x1", function(d: tickedObject) {
-          return d.source.x;
-        })
-        .attr("y1", function(d: tickedObject) {
-          return d.source.y;
-        })
-        .attr("x2", function(d: tickedObject) {
-          return d.target.x;
-        })
-        .attr("y2", function(d: tickedObject) {
-          return d.target.y;
-        });
+        .attr("x1", (d: tickedObject) => d.source.x)
+        .attr("y1", (d: tickedObject) => d.source.y)
+        .attr("x2", (d: tickedObject) => d.target.x)
+        .attr("y2", (d: tickedObject) => d.target.y);
 
       node
-        .attr("cx", function(d: nodePosition) {
-          return d.x;
-        })
-        .attr("cy", function(d: nodePosition) {
-          return d.y;
-        });
-    }
+        .attr("cx", (d: nodePosition) => d.x)
+        .attr("cy", (d: nodePosition) => d.y);
+    });
+    simulation.force("link").links(links);
 
     function dragstarted(d: dragedPosition) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -148,15 +136,13 @@ export default class ExampleComponent extends React.Component<Props> {
   }
 
   render() {
-    //const { data } = this.props;
     return (
       <svg
         className="Network-canvas"
-        ref={svgWrapper => (_wrapper = svgWrapper)}
+        ref={(svgWrapper: SVGSVGElement) => (_wrapper = svgWrapper)}
         width={_innerWidth}
-        height={520}
+        height={600}
       />
     );
-    //return <div className={styles.test}>test: {text}</div>;
   }
 }
