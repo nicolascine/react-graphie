@@ -10,6 +10,8 @@ import { schemeCategory10 } from "d3-scale-chromatic";
 import { select, event } from "d3-selection";
 import { drag } from "d3-drag";
 
+import "./styles.css";
+
 export type Props = { data: any; options: object };
 
 interface linkObject {
@@ -71,39 +73,30 @@ export default class Graph extends React.Component<Props> {
     const height = this.state.options.height;
 
     const simulation: any = forceSimulation()
-      .force(
-        "link",
-        forceLink().id(function(d: linkObject) {
-          return d.id;
-        })
-      )
+      .force("link", forceLink().id((d: linkObject) => d.id))
       .force("charge", forceManyBody())
       .force("center", forceCenter(width / 2, height / 2));
 
     const link = select(svg)
       .append("g")
-      .attr("class", "links")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(links)
       .enter()
       .append("line")
-      .attr("stroke-width", function(d: linkStroke) {
-        return Math.sqrt(d.value);
-      });
+      .attr("stroke-width", (d: linkStroke) => Math.sqrt(d.value));
 
     const node = select(svg)
       .append("g")
-      .attr("class", "nodes")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
       .selectAll("circle")
       .data(nodes)
       .enter()
       .append("circle")
-      .attr("r", function(d: nodeObject) {
-        return d.group === 1 ? 9 : 6;
-      })
-      .attr("fill", function(d: nodeFillObject) {
-        return color(d.group);
-      })
+      .attr("r", (d: nodeObject) => (d.group === 1 ? 9 : 6))
+      .attr("fill", (d: nodeFillObject) => color(d.group))
       .call(
         drag()
           .on("start", dragstarted)
