@@ -57,7 +57,6 @@ export default class Graph extends React.Component<Props> {
 
   componentDidMount() {
     this.drawNetwork(this.props.data);
-    this.setState({ options: this.props.options });
   }
 
   drawNetwork(dataSet: any) {
