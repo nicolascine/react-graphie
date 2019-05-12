@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Graph from "react-graphie";
 
-const exampleDataset = {
+const dataset = {
   nodes: [
     { id: "Myriel", group: 1 },
     { id: "Napoleon", group: 2 },
@@ -20,13 +20,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="container">
-        <Graph
-          data={exampleDataset}
-          options={{
-            width: 500,
-            height: 500
-          }}
-        />
+        <Graph data={dataset} />
       </div>
     );
   }

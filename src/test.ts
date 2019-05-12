@@ -1,7 +1,7 @@
-import ExampleComponent from "./";
+import Graph from "./";
 
-describe("ExampleComponent", () => {
+describe("Graph", () => {
   it("is truthy", () => {
-    expect(ExampleComponent).toBeTruthy();
+    expect(Graph).toBeTruthy();
   });
 });
