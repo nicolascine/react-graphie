@@ -23,13 +23,6 @@ const options = {
 
 export default class App extends Component {
   render() {
-    return (
-      <div
-        className="container"
-        style={{ width: `${options.width}px`, height: `${options.height}px` }}
-      >
-        <Graph dataset={dataset} options={options} />
-      </div>
-    );
+    return <Graph dataset={dataset} options={options} />;
   }
 }

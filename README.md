@@ -31,9 +31,14 @@ const dataset = {
   ]
 };
 
+const options = {
+  width: 100,
+  height: 100
+};
+
 export default class App extends Component {
   render() {
-    return <Graph data={dataset} />;
+    return <Graph dataset={dataset} options={options} />;
   }
 }
 ```
