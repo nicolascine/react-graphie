@@ -16,11 +16,19 @@ const dataset = {
   ]
 };
 
+const options = {
+  width: 100,
+  height: 100
+};
+
 export default class App extends Component {
   render() {
     return (
-      <div className="container">
-        <Graph data={dataset} />
+      <div
+        className="container"
+        style={{ width: `${options.width}px`, height: `${options.height}px` }}
+      >
+        <Graph dataset={dataset} options={options} />
       </div>
     );
   }

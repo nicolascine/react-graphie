@@ -10,67 +10,102 @@ import { schemeCategory10 } from "d3-scale-chromatic";
 import { select, event } from "d3-selection";
 import { drag } from "d3-drag";
 
-export type Props = { data: any; options: object };
+const DEFAULT_WIDTH = 500;
+const DEFAULT_HEIGHT = 500;
 
-interface linkObject {
+type LinkObject = {
   id: string;
-}
-interface linkStroke {
+};
+
+type LinkStroke = {
   value: number;
-}
-interface nodeObject {
-  group: number;
-}
-interface nodeFillObject {
+};
+
+type NodeFillObject = {
   group: string;
-}
-interface tickedObject {
-  source: {
-    x: number;
-    y: number;
-  };
-  target: {
-    x: number;
-    y: number;
-  };
-}
-interface nodePosition {
+};
+
+type source = {
   x: number;
   y: number;
+};
+
+type target = {
+  x: number;
+  y: number;
+};
+
+interface TickedObject {
+  source: source;
+  target: target;
 }
-interface dragedPosition {
+
+type NodePosition = {
+  x: number;
+  y: number;
+};
+
+type DragedPosition = {
   x: number;
   y: number;
   fx: number | null;
   fy: number | null;
+};
+
+interface Options {
+  width: number;
+  height: number;
 }
 
-let _wrapper: SVGSVGElement;
+interface Dataset {
+  nodes: any;
+  links: any;
+}
 
-export default class Graph extends React.Component<Props> {
+let _wrapper: SVGSVGElement = {} as SVGSVGElement;
+
+export type Props = { dataset: any; options: Options };
+export type State = { dataset: Dataset; options: Options };
+
+export default class Graph extends React.Component<Props, State> {
   state = {
-    options: {
-      width: 500,
-      height: 500
-    }
+    dataset: {} as Dataset,
+    options: {} as Options
   };
 
-  componentDidMount() {
-    this.drawNetwork(this.props.data);
+  componentWillMount() {
+    const options = this.props.options;
+    const dataset = this.props.dataset;
+    let width = DEFAULT_WIDTH;
+    let height = DEFAULT_HEIGHT;
+    if (
+      options &&
+      options.hasOwnProperty("width") &&
+      options.hasOwnProperty("height")
+    ) {
+      width = options.width;
+      height = options.height;
+    }
+    this.setState({ dataset, options: { width, height } });
   }
 
-  drawNetwork(dataSet: any) {
+  componentDidMount() {
+    const { dataset, options } = this.state;
+    this.drawNetwork(dataset, options);
+  }
+
+  drawNetwork(dataset: Dataset, options: Options) {
     const svg = _wrapper;
     const color = scaleOrdinal(schemeCategory10);
-    const links = dataSet.links.map((d: nodeFillObject) => Object.create(d));
-    const nodes = dataSet.nodes.map((d: nodeFillObject) => Object.create(d));
+    const links = dataset.links.map((d: NodeFillObject) => Object.create(d));
+    const nodes = dataset.nodes.map((d: NodeFillObject) => Object.create(d));
 
     //state
-    const width = this.state.options.width;
-    const height = this.state.options.height;
+    const width = options.width;
+    const height = options.height;
 
     const simulation: any = forceSimulation()
-      .force("link", forceLink().id((d: linkObject) => d.id))
+      .force("link", forceLink().id((d: LinkObject) => d.id))
       .force("charge", forceManyBody())
       .force("center", forceCenter(width / 2, height / 2));
 
@@ -82,7 +117,7 @@ export default class Graph extends React.Component<Props> {
       .data(links)
       .enter()
       .append("line")
-      .attr("stroke-width", (d: linkStroke) => Math.sqrt(d.value));
+      .attr("stroke-width", (d: LinkStroke) => Math.sqrt(d.value));
 
     const node = select(svg)
       .append("g")
@@ -92,8 +127,8 @@ export default class Graph extends React.Component<Props> {
       .data(nodes)
       .enter()
       .append("circle")
-      .attr("r", (d: nodeObject) => (d.group === 1 ? 9 : 6))
-      .attr("fill", (d: nodeFillObject) => color(d.group))
+      .attr("r", 5)
+      .attr("fill", (d: NodeFillObject) => color(d.group))
       .call(
         drag()
           .on("start", dragstarted)
@@ -103,29 +138,29 @@ export default class Graph extends React.Component<Props> {
 
     simulation.nodes(nodes).on("tick", () => {
       link
-        .attr("x1", (d: tickedObject) => d.source.x)
-        .attr("y1", (d: tickedObject) => d.source.y)
-        .attr("x2", (d: tickedObject) => d.target.x)
-        .attr("y2", (d: tickedObject) => d.target.y);
+        .attr("x1", (d: TickedObject) => d.source.x)
+        .attr("y1", (d: TickedObject) => d.source.y)
+        .attr("x2", (d: TickedObject) => d.target.x)
+        .attr("y2", (d: TickedObject) => d.target.y);
 
       node
-        .attr("cx", (d: nodePosition) => d.x)
-        .attr("cy", (d: nodePosition) => d.y);
+        .attr("cx", (d: NodePosition) => d.x)
+        .attr("cy", (d: NodePosition) => d.y);
     });
     simulation.force("link").links(links);
 
-    function dragstarted(d: dragedPosition) {
+    function dragstarted(d: DragedPosition) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
 
-    function dragged(d: dragedPosition) {
+    function dragged(d: DragedPosition) {
       d.fx = event.x;
       d.fy = event.y;
     }
 
-    function dragended(d: dragedPosition) {
+    function dragended(d: DragedPosition) {
       if (!event.active) simulation.alphaTarget(0);
       d.fx = null;
       d.fy = null;
