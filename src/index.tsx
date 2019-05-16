@@ -10,8 +10,10 @@ import { schemeCategory10 } from "d3-scale-chromatic";
 import { select, event } from "d3-selection";
 import { drag } from "d3-drag";
 
-const DEFAULT_WIDTH = 500;
-const DEFAULT_HEIGHT = 500;
+const DEFAULT_OPTIONS = {
+  width: 500,
+  height: 500
+};
 
 type LinkObject = {
   id: string;
@@ -64,7 +66,7 @@ interface Dataset {
 
 let _wrapper: SVGSVGElement = {} as SVGSVGElement;
 
-export type Props = { dataset: any; options: Options };
+export type Props = { dataset: Dataset; options: Options };
 export type State = { dataset: Dataset; options: Options };
 
 export default class Graph extends React.Component<Props, State> {
@@ -74,19 +76,13 @@ export default class Graph extends React.Component<Props, State> {
   };
 
   componentWillMount() {
-    const options = this.props.options;
+    const options = this.props.options || {};
     const dataset = this.props.dataset;
-    let width = DEFAULT_WIDTH;
-    let height = DEFAULT_HEIGHT;
-    if (
-      options &&
-      options.hasOwnProperty("width") &&
-      options.hasOwnProperty("height")
-    ) {
-      width = options.width;
-      height = options.height;
-    }
-    this.setState({ dataset, options: { width, height } });
+
+    this.setState({
+      dataset,
+      options: Object.assign({}, DEFAULT_OPTIONS, options)
+    });
   }
 
   componentDidMount() {
