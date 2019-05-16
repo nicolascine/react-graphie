@@ -27,19 +27,19 @@ type NodeFillObject = {
   group: string;
 };
 
-type source = {
+type Source = {
   x: number;
   y: number;
 };
 
-type target = {
+type Target = {
   x: number;
   y: number;
 };
 
 interface TickedObject {
-  source: source;
-  target: target;
+  source: Source;
+  target: Target;
 }
 
 type NodePosition = {
