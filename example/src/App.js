@@ -17,8 +17,8 @@ const dataset = {
 };
 
 const options = {
-  width: 100,
-  height: 100
+  width: 250,
+  height: 250
 };
 
 export default class App extends Component {
