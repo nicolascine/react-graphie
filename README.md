@@ -2,7 +2,7 @@
 
 > React graphs with D3
 
-[![NPM](https://img.shields.io/npm/v/react-graphie.svg)](https://www.npmjs.com/package/react-graphie) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-graphie.svg)](https://www.npmjs.com/package/react-graphie) [![Build Status](https://travis-ci.com/nicolascine/react-graphie.svg?branch=master)](https://travis-ci.com/nicolascine/react-graphie) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
