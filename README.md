@@ -3,7 +3,6 @@
 > A modern React library for creating beautiful and interactive graph visualizations using D3.js
 
 [![NPM](https://img.shields.io/npm/v/react-graphie.svg)](https://www.npmjs.com/package/react-graphie)
-[![Build Status](https://travis-ci.com/nicolascine/react-graphie.svg?branch=master)](https://travis-ci.com/nicolascine/react-graphie)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -66,6 +65,22 @@ For detailed documentation and examples, please visit our [documentation site](h
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Development
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Publishing
+
+This project uses GitHub Actions to automatically publish to NPM when a new release is created. To publish a new version:
+
+1. Update the version in `package.json`
+2. Create a new release on GitHub
+3. The GitHub Action will automatically build and publish to NPM
 
 ## License
 
