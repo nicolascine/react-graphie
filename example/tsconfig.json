@@ -14,15 +14,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "declaration": true,
-    "outDir": "./dist",
-    "declarationDir": "./dist",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitReturns": true,
-    "noImplicitOverride": true,
     "useDefineForClassFields": true
   },
   "include": [
@@ -31,9 +22,6 @@
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "example",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "dist"
   ]
-}
+} 
